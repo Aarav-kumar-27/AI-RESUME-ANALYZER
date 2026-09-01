@@ -12,11 +12,13 @@ class Settings(BaseSettings):
     PORT: int = 8000
     
     # CORS Configuration
-    CORS_ORIGINS: List[str] = [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-    ]
+    CORS_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "https://ai-resume-analyzer-frontend-zpqa.onrender.com"
+]
+
     
     @field_validator("CORS_ORIGINS", mode="before")
     def parse_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
