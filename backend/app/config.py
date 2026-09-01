@@ -12,12 +12,13 @@ class Settings(BaseSettings):
     PORT: int = 8000
     
     # CORS Configuration
-    CORS_ORIGINS = [
+    CORS_ORIGINS: list[str] = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
-    "https://ai-resume-analyzer-frontend-zpqa.onrender.com"
+    "https://ai-resume-analyzer-frontend-zpqa.onrender.com",
 ]
+
 
     
     @field_validator("CORS_ORIGINS", mode="before")
