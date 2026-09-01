@@ -1,0 +1,9 @@
+# Protect environment secrets in backend directory
+.env
+*.env
+!.env.example
+
+# Python cache & virtualenv
+__pycache__/
+venv/
+.pytest_cache/
