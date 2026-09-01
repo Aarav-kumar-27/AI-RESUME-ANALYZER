@@ -1,65 +1,244 @@
-🤖 AI Resume Analyzer
+AI Resume Analyzer
 
-An AI-powered resume analysis platform that helps users evaluate, improve, and optimize their resumes. The application analyzes resume content, identifies strengths and weaknesses, provides actionable suggestions, and helps candidates make their resumes more effective for modern job applications.
+An AI-powered resume analysis platform that evaluates a resume against a target job description and provides an overall match score, skill matching, improvement feedback, and actionable recommendations.
 
-Built by Aarav Kumar
+Built with React, FastAPI, Python, and Google Gemini, with a local heuristic fallback for reliable analysis when Gemini is unavailable.
+
+🚀 Live Demo
+
+Frontend: https://ai-resume-analyzer-frontend-zpqa.onrender.com
+
+Backend API: https://ai-resume-analyzer-k3yc.onrender.com
 
 ✨ Features
-📄 Upload and analyze resumes
-🤖 AI-powered resume evaluation
-🔍 Identify strengths and weaknesses
-📊 Resume scoring and analysis
-💼 Job/role-focused resume suggestions
-📝 Improvement recommendations
-🎯 Keyword and skill analysis
-📱 Responsive and modern user interface
-⚡ Fast frontend powered by Vite
-🐍 Python-based backend API
+📄 Upload resumes in PDF and DOCX formats
+💼 Enter a target job description
+🤖 AI-powered analysis using Google Gemini
+🔄 Automatic heuristic fallback when Gemini is unavailable
+🎯 Deterministic overall resume-job match score
+📊 Visual score dashboard
+🧩 Matching and missing skill detection
+💡 Grounded improvement recommendations
+📝 Resume strengths and weaknesses
+🌙 Dark/Light theme support
+📱 Responsive design for mobile, tablet, and desktop
+🔐 API key securely isolated in the backend
+🛡️ File validation and upload security
+🚫 Uploaded resumes are processed in memory without permanent document storage
+🧠 How It Works
+
+The application follows this workflow:
+
+Resume Upload
+      ↓
+PDF/DOCX Validation
+      ↓
+Resume Text Extraction
+      ↓
+Job Description Processing
+      ↓
+Google Gemini AI Analysis
+      ↓
+Structured JSON Validation
+      ↓
+Deterministic Score Calculation
+      ↓
+Interactive Results Dashboard
+
+
+If Gemini is unavailable because the API key is missing, the API quota is exceeded, or an AI request fails, the system automatically falls back to the local heuristic analysis engine.
+
+🎯 Scoring System
+
+The overall match score is calculated by the backend using a deterministic weighted formula:
+
+Overall Score =
+    ATS Compatibility     × 20%
+  + Skills Match          × 30%
+  + Experience Relevance  × 25%
+  + Achievement           × 15%
+  + Clarity               × 10%
+
+
+The final score is calculated independently by the backend rather than relying on Gemini to calculate the overall score.
+
+Score Categories
+Category	Weight
+ATS Compatibility	20%
+Skills Match	30%
+Experience Relevance	25%
+Achievement	15%
+Clarity	10%
+🤖 AI Analysis
+
+The application uses Google's Gemini API for structured resume analysis.
+
+Gemini provides:
+
+ATS compatibility score
+Skills match score
+Experience relevance score
+Achievement score
+Clarity score
+Matching skills
+Missing skills
+Resume strengths
+Areas for improvement
+Actionable recommendations
+Overall analysis summary
+
+The backend validates the AI response using Pydantic before returning it to the frontend.
+
+🔄 Heuristic Fallback
+
+The application includes a local analysis engine that automatically takes over when Gemini cannot be used.
+
+The fallback engine:
+
+Extracts relevant keywords
+Compares resume skills with job requirements
+Generates matching and missing skills
+Produces a validated analysis response
+Maintains the same response structure used by the Gemini path
+
+This allows the application to remain functional even when the AI service is unavailable.
+
 🛠️ Tech Stack
 Frontend
 React
 Vite
+Axios
+Tailwind CSS
 JavaScript
-HTML5
-CSS3
+Responsive UI
+SVG-based score visualization
 Backend
 Python
-REST API
-AI/LLM-based resume analysis
-Development Tools
-Git & GitHub
-npm
-Python Virtual Environment
+FastAPI
+Pydantic
+Uvicorn
+PyMuPDF
+python-docx
+Google GenAI SDK
+Testing
+Pytest
+API integration tests
+Parser tests
+Schema validation tests
+Scoring tests
+Heuristic fallback tests
+End-to-end workflow testing
+Deployment
+GitHub
+Render
+Render Static Site for frontend
+Render Web Service for backend
 📁 Project Structure
-AI-Resume-Analyzer/
+AI-RESUME-ANALYZER/
 │
 ├── backend/
-│   ├── app.py
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── routes.py
+│   │   ├── schemas/
+│   │   │   └── analysis.py
+│   │   ├── services/
+│   │   │   ├── ai_service.py
+│   │   │   ├── heuristic_service.py
+│   │   │   ├── parser_service.py
+│   │   │   └── scoring_service.py
+│   │   ├── config.py
+│   │   └── main.py
+│   │
+│   ├── tests/
+│   │   ├── test_api.py
+│   │   ├── test_heuristic.py
+│   │   ├── test_parser.py
+│   │   ├── test_schemas.py
+│   │   └── test_scoring.py
+│   │
 │   ├── requirements.txt
-│   └── ...
+│   └── run.py
 │
 ├── frontend/
 │   ├── src/
-│   ├── public/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── services/
+│   │   ├── App.jsx
+│   │   └── main.jsx
 │   ├── package.json
-│   ├── vite.config.js
-│   └── ...
+│   └── vite.config.js
 │
 ├── .gitignore
 └── README.md
 
-🚀 Getting Started
+🔐 Security
 
-Follow these steps to run the project locally.
+Security was considered throughout the application.
 
-1. Clone the Repository
-git clone https://github.com/your-username/AI-Resume-Analyzer.git
-cd AI-Resume-Analyzer
+API Key Protection
 
-2. Setup the Backend
+The Gemini API key is stored only in the backend environment configuration.
 
-Navigate to the backend directory:
+backend/.env
 
+
+The .env file is excluded from Git using .gitignore.
+
+The frontend never receives or stores the Gemini API key.
+
+Resume Processing
+
+Uploaded documents are processed in memory.
+
+The application does not permanently store uploaded resumes or job descriptions.
+
+File Validation
+
+Uploaded files are checked using multiple validation layers:
+
+Supported extension
+MIME type
+File signature / magic bytes
+Maximum file size
+Empty file detection
+Minimum extracted text length
+Corrupt document handling
+
+The current maximum upload size is 5 MB.
+
+🌐 API
+Health Check
+GET /api/health
+
+
+Example response:
+
+{
+  "status": "ok",
+  "version": "1.0.0",
+  "service": "AI Resume Analyzer API"
+}
+
+Resume Analysis
+POST /api/analyze
+
+
+Multipart form data:
+
+file
+job_description
+
+
+The API returns a validated structured analysis response containing the score breakdown, skills, feedback, recommendations, summary, and analysis source.
+
+💻 Local Development
+1. Clone the repository
+git clone https://github.com/Aarav-kumar-27/AI-RESUME-ANALYZER.git
+cd AI-RESUME-ANALYZER
+
+2. Backend Setup
 cd backend
 
 
@@ -68,30 +247,43 @@ Create a virtual environment:
 python -m venv venv
 
 
-Activate the virtual environment.
-
-Windows:
+Activate it on Windows:
 
 venv\Scripts\activate
 
 
-macOS/Linux:
-
-source venv/bin/activate
-
-
-Install the required dependencies:
+Install dependencies:
 
 pip install -r requirements.txt
 
 
-Start the backend server:
+Create:
 
-python app.py
+backend/.env
 
-3. Setup the Frontend
 
-Open another terminal and navigate to the frontend:
+Add:
+
+GEMINI_API_KEY=your_gemini_api_key
+
+
+Start the backend:
+
+python run.py
+
+
+The backend will be available at:
+
+http://127.0.0.1:8000
+
+
+API documentation:
+
+http://127.0.0.1:8000/docs
+
+3. Frontend Setup
+
+Open another terminal:
 
 cd frontend
 
@@ -101,127 +293,103 @@ Install dependencies:
 npm install
 
 
-Start the development server:
+Create:
+
+frontend/.env
+
+
+Add:
+
+VITE_API_BASE_URL=http://localhost:8000/api
+
+
+Start the frontend:
 
 npm run dev
 
 
-The application will be available at the local URL shown by Vite, typically:
+The frontend will normally be available at:
 
 http://localhost:5173
 
-🔄 How It Works
-User
-  │
-  ▼
-React + Vite Frontend
-  │
-  │ Resume Upload
-  ▼
-Python Backend API
-  │
-  ▼
-Resume Text Extraction
-  │
-  ▼
-AI Analysis
-  │
-  ├── Skills
-  ├── Keywords
-  ├── Strengths
-  ├── Weaknesses
-  └── Suggestions
-  │
-  ▼
-Analysis Results
-  │
-  ▼
-React Dashboard
+🧪 Running Tests
 
-📊 Resume Analysis
+From the backend directory:
 
-The analyzer can provide insights such as:
-
-Category	Analysis
-📄 Resume Content	Reviews the overall resume
-🎯 Skills	Identifies relevant technical and soft skills
-🔑 Keywords	Finds important job-related keywords
-💪 Strengths	Highlights strong areas
-⚠️ Weaknesses	Identifies areas that need improvement
-💡 Suggestions	Provides actionable recommendations
-📈 Score	Gives an overall resume evaluation
-🔐 Environment Variables
-
-If your project uses API keys or other secrets, create a .env file in the backend directory.
-
-Example:
-
-AI_API_KEY=your_api_key_here
+pytest -v
 
 
-Never commit API keys or other sensitive credentials to GitHub.
+The project includes tests covering:
 
-Add your environment files to .gitignore:
+Resume parsing
+PDF/DOCX handling
+Invalid files
+Pydantic schemas
+Deterministic scoring
+Heuristic analysis
+API endpoints
+📊 Verification
 
-.env
-venv/
-node_modules/
-__pycache__/
+The application has been tested across the complete workflow:
 
-🎨 Frontend
+✅ PDF resume upload
+✅ DOCX resume upload
+✅ Resume text extraction
+✅ Job description validation
+✅ Gemini structured analysis
+✅ Pydantic validation
+✅ Deterministic score calculation
+✅ Heuristic fallback
+✅ Frontend/backend integration
+✅ CORS configuration
+✅ Dark/light mode
+✅ Responsive layouts
+✅ File validation
+✅ Production frontend build
+✅ Render deployment
+🎨 Dashboard
 
-The frontend is built with React and Vite, providing a fast and responsive interface for:
+The results dashboard provides:
 
-Resume uploading
-Analysis progress
-Resume scores
-AI recommendations
-Skills and keyword visualization
-User-friendly results
-🐍 Backend
+Overall match score
+Animated score gauge
+Category score breakdown
+Matching skills
+Missing skills
+Resume strengths
+Improvement areas
+Actionable recommendations
+AI/heuristic analysis source indicator
+🚀 Deployment
 
-The backend is developed using Python and provides the API responsible for:
+The project is deployed using Render.
 
-Receiving uploaded resumes
-Processing resume files
-Extracting resume information
-Communicating with the AI analysis system
-Returning structured analysis results to the frontend
-🔮 Future Improvements
- ATS compatibility score
- Job description matching
- Resume-to-job compatibility percentage
- Support for multiple resume formats
- Resume improvement/rewrite suggestions
- Downloadable analysis reports
- User authentication
- Resume history and comparison
- More detailed analytics dashboard
- Deployment with Docker
-🤝 Contributing
+Frontend
+Render Static Site
 
-Contributions are welcome!
+Backend
+Render Web Service
 
-Fork the repository
-Create a new branch
-git checkout -b feature/your-feature
 
-Make your changes
-Commit your changes
-git commit -m "Add your feature"
+The frontend communicates with the deployed FastAPI backend through the configured:
 
-Push the branch
-git push origin feature/your-feature
+VITE_API_BASE_URL
 
-Open a Pull Request
+
+The Gemini API key remains configured exclusively on the backend.
+
+⚠️ Free Hosting
+
+The application currently uses Render's free compute tier.
+
+Free backend instances may spin down after inactivity, which can cause the first request after a period of inactivity to take longer.
+
 👨‍💻 Author
 
 Aarav Kumar
 
-AI Resume Analyzer — built with Python, React, and Vite.
+AI Resume Analyzer — an end-to-end AI-powered resume evaluation platform built with React, FastAPI, Python, and Google Gemini.
 
-⭐ Support
+📄 License
 
-If you find this project useful, consider giving the repository a ⭐ on GitHub!
-
-Made with ❤️ by Aarav Kumar
+This project is intended for educational, portfolio, and demonstration purposes.
